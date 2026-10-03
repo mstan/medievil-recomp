@@ -47,7 +47,8 @@ target_include_directories(psx-runtime PRIVATE
     "${PSXRECOMP_ROOT}/lib/recomp-net/include")
 target_sources(psx-runtime PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/mods/medievil_widescreen.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/mods/medievil_frame_rate.c")
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mods/medievil_texture_filter.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mods/medievil_frame_rate.cpp")
 
 option(MEDIEVIL_BUILD_TESTS "Build MediEvil terrain contract checks" OFF)
 if(MEDIEVIL_BUILD_TESTS)

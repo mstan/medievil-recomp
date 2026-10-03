@@ -19,8 +19,8 @@ entry_point = "0x801B5CD0"
 name = "PSXRecomp"
 repository = "https://github.com/RetroPortingToolKit/psxrecomp.git"
 # Local rendering extensions integrated with upstream master 973d93a90761c8ef986ce9af63965d96a3613ed3.
-commit = "46af572902210d94e46305355ad22649c6b0bd3f"
-tree = "c1bb6af66225d646029aa2bade42d18f26ec7d91"
+commit = "9499440dbdb4d8322e2623b67bc8fda849106be0"
+tree = "b350db829ea98dc94aaa665d53a9e3f4232fda01"
 recomp_ui_commit = "03d58aa098fc4c2ca944ee43659cb45ce586362a"
 license = "See the pinned dependency license; this binding does not approve commercial use."
 

@@ -23,7 +23,9 @@ resolution preset, PGXP geometry correction and perspective textures. Adaptive
 View also offers Original, 2x and 3x (default) terrain distance, with terrain
 subdivision bypass enabled by default. Smooth Presentation follows the display
 refresh by default, with 60/120/144/240/360 FPS choices. These are presentation
-targets using temporal image blending; the game retains its original timing.
+targets using camera/model draw interpolation; the game retains its original timing.
+Stable world texture filtering is enabled by default, with nearest and bilinear
+also available in Mods. HUD sprites retain sharp nearest sampling.
 Live throughput can fall below the selected rate. See [enhancement validation](docs/ENHANCEMENTS.md)
 for the tested route and remaining qualification work.
 
@@ -208,12 +210,13 @@ title-scene black regions and other levels remain qualification work.
 | Smooth Presentation | Display | Mods: Display / 60 / 120 / 144 / 240 / 360 FPS |
 | Internal resolution | 1080p preset | Display settings; integer 5x at the 240-line reference |
 
-Smooth Presentation reuses the shared OpenGL motion-adaptive frame blending
-path. It follows real game frame flips so a game frame can span multiple
-VBlanks. Gameplay, input, timers and audio keep their original speed. It blends
-completed images rather than generating new geometry or motion vectors; moving
-edges can soften and presentation includes a source-frame delay. Display follows
-the measured monitor refresh, while the fixed choices set presentation targets.
+Smooth Presentation replays the game's drawing code with interpolated camera
+and model transforms inside a machine-state sandbox. Gameplay, input, timers
+and audio keep their original speed. Display follows measured monitor refresh;
+fixed choices set presentation targets. Draw cost limits the actual number of
+extra renders. Cuts, unmatched geometry and UI retain the original game frame.
+World Texture Filtering offers nearest, bilinear and stable minification. Stable
+filtering is palette-aware and preserves cutouts, texture windows and sharp UI.
 
 Both terrain subdivision selections are compiled ahead of time from separately
 verified patched engine images. Selecting bypass no longer invalidates engine

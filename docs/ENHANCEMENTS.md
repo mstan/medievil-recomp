@@ -1,6 +1,41 @@
 # MediEvil enhancement implementation notes
 
-Updated: 2026-10-02. Branch: `feat/medievil-enhancements`, based on
+## Native-quality update (2026-10-03)
+
+Smooth Presentation now interpolates camera/model transforms and runs additional
+game-code drawing passes. Capture starts at `0x800239BC`, after CD streaming,
+effects and texture-timer updates, and stops at `0x80023A20`. Replay excludes
+those simulation updates. The retail instruction and buffer layout are guarded;
+discontinuities reset the history. The corrected drawing span passed 76 CPU,
+RAM, device and VRAM sandbox comparisons with zero mismatches or watchdogs.
+
+Texture Filtering offers Nearest, Bilinear and Stable. Stable filters tracked
+world geometry with bounded derivative-based sampling while preserving cutout
+and semi-transparency classes, live palettes and texture windows. Untracked
+sprites/UI remain nearest. The shared OpenGL fixture passed 325 checks.
+
+The same cold Crypt checkpoint was measured for ten seconds per mode, with
+compilation stopped, a 1280x720 window and 5x internal scale (1200 lines):
+
+| Mode | Guest VBlanks/s | Additional geometry draws/s | Static phase residency |
+| --- | ---: | ---: | ---: |
+| Native / nearest | 59.67 | 0 | 98.63% |
+| Interpolated / nearest | 58.88 | 21.89 | 97.78% |
+| Interpolated / stable | 59.46 | 20.05 | 98.08% |
+
+These are event-counter deltas and host wall-time phase samples, not unique
+displayed FPS or an instruction-coverage percentage. Requested presentation
+rate is a target; replay cost limits the number of distinct intermediate images.
+The shared `tools/measure_render_quality.py` reproduces this measurement.
+
+The native code-byte cache now has bounded four-way lookup and replacement,
+including when coverage exceeds cache capacity. Windows diagnostic stack
+capture resumes the game before symbol resolution. Release optimization and
+these shared changes qualify the cold Crypt route; broader startup, level and
+save qualification remains tracked by `beads-eio.18.12`. New snapshots preserve
+the BIOS/game handoff latch and invalidate interpolation histories on load.
+
+Updated: 2026-10-03. Branch: `feat/medievil-native-quality-20261003`, based on
 Alex's main `f8eb216f10ef7f644b33643330b967cd29562709`.
 
 ## Starting point
@@ -21,16 +56,15 @@ the setup executable name; its publication does not establish gameplay quality.
 | More guest RAM | Shared optional 8 MiB map | Framework; buffer relocation/capacity changes are engine-specific |
 | Offline engine/overlay compilation | Declarative AOT pipeline already exists | Title profile; reusable extraction methods in framework |
 | Draw distance, terrain, fog, ordering-table capacities | No universally safe slider | MediEvil engine plugin; common helpers where another engine can reuse them |
-| Transform-aware geometry interpolation | Generic transform provenance/matching/replay remains to be implemented | Framework, with title exceptions |
+| Transform-aware geometry interpolation | Shared GTE projection matching, quaternion/translation interpolation and drawing replay | Framework, with title drawing boundaries |
 | Redraw-based interpolation | Shared render-pass sandbox exists | Title supplies scene/camera/object hooks |
 | SDK HLE | Original SDK code executes through the runtime today | Shared optional backends, qualified against the existing API contract |
 
-Geometry interpolation needs transform identity/provenance from GTE through
-PGXP, geometry matching across frames, and rotation/translation interpolation
-before reprojection. The existing image-blending modes do not provide that
-geometry. The render-pass API offers another route through a game draw adapter.
-Keep gameplay simulation cadence intact when adding intermediate presentation
-frames.
+Geometry interpolation now matches GTE projection inputs and transform
+provenance across frames, interpolates rotation and translation, and replays
+the title's drawing code inside the shared render-pass sandbox. Gameplay
+simulation keeps its original cadence. Menu sprites and movies retain their
+original presentation when no suitable geometry history exists.
 
 Wider and farther terrain rendering needs safe primitive/capture/ordering-table/
 fog storage, plus appropriate clipping and subdivision behavior. These changes
@@ -310,7 +344,7 @@ match every part of the owner's reported left-wall deformation.
 
 ## Visual defaults and extended terrain (2026-10-02)
 
-The current framework pin is `46af572902210d94e46305355ad22649c6b0bd3f`,
+The current framework pin is `9499440dbdb4d8322e2623b67bc8fda849106be0`,
 extending the native-wide integration merge `a95d8c77ee57d5aee84cc46142a0ac6f86d52cd7`
 of upstream master `973d93a90761c8ef986ce9af63965d96a3613ed3`. Framework
 [PR #483](https://github.com/RetroPortingToolKit/psxrecomp/pull/483) publishes the
@@ -327,7 +361,7 @@ without recursing into its historical submodules.
 | Adaptive view | Fit | Reveals more world at the window ratio, with a 4:3 minimum |
 | Terrain distance | 3x | Mod option also offers Original and 2x |
 | Terrain subdivision bypass | On | Conditional guarded disc patches; both selections compiled ahead of time |
-| Smooth Presentation mod | Display | Shared motion-adaptive blending, with 60/120/144/240/360 presentation targets |
+| Smooth Presentation mod | Display | Camera/model draw interpolation, with 60/120/144/240/360 presentation targets |
 
 The terrain adapter uses verified USA function boundaries and retains the guest
 capture-record, marked-cell cleanup and primitive-list contracts. It replaces
@@ -412,14 +446,21 @@ ships a default-on override of the shared PGXP manifest; disabling the mod
 therefore restores the base path. Previously task-added local video overrides
 were removed without changing the player's other preferences.
 
-Smooth Presentation uses the shared OpenGL motion-adaptive temporal blend and
-the FLIP source: a 30 Hz game image can span two original guest VBlanks. Display
-passes the zero sentinel to follow measured monitor refresh. Fixed 60, 120,
-144, 240 and 360 choices select presentation targets. Gameplay, timers, input,
-CD and audio keep their original cadence. This combines completed images;
-it does not implement transform interpolation or motion-vector generation.
-Large visual changes switch more cleanly, but temporal blending can soften
-moving edges and retains a source-image delay. FMVs suspend blending.
+Smooth Presentation now replays camera/model drawing at intermediate phases.
+The guarded capture instruction is 0x800239BC, after the function's streaming,
+effect and texture-timer updates; replay ends at 0x80023A20. Submission is bound
+to the engine's call of 0x8009BC64. CPU, RAM, scratch, GPU/DMA state and precision
+shadows are restored after each extra draw. Geometry identity and discontinuity
+guards prevent blending unrelated vertices or scene cuts. The Display/60/120/
+144/240/360 choices retain their IDs and select presentation targets. Guest
+simulation, input and audio retain their original cadence. Movies and untracked
+UI keep their original frames; draw cost limits delivered throughput.
+
+World Texture Filtering defaults to stable minification on proven OpenGL world
+polygons, with nearest and bilinear options. Palette colors are decoded before
+averaging; live CLUTs, windows, primitive bounds, cutouts and STP classes remain
+authoritative. Untracked UI stays nearest. Other backends use bilinear. Turning
+the feature off restores the Display filter setting.
 
 The owned-disc audit now validates 29 images/recipes and 49330 guarded variants
 in 31 generated files. Capture metadata at expanded guest RAM `0x80308C20`
