@@ -344,7 +344,7 @@ match every part of the owner's reported left-wall deformation.
 
 ## Visual defaults and extended terrain (2026-10-02)
 
-The current framework pin is `9499440dbdb4d8322e2623b67bc8fda849106be0`,
+The current framework pin is `bf5555c6ae84908a8522e9c411442ab6dbaf4877`,
 extending the native-wide integration merge `a95d8c77ee57d5aee84cc46142a0ac6f86d52cd7`
 of upstream master `973d93a90761c8ef986ce9af63965d96a3613ed3`. Framework
 [PR #483](https://github.com/RetroPortingToolKit/psxrecomp/pull/483) publishes the
