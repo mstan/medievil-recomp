@@ -527,11 +527,20 @@ throughput still needs shared-framework qualification and optimization.
 The game changes are published as ordered PRs
 [1](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/1),
 [2](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/2),
-[3](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/3) and
-[4](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/4).
-Shared prerequisites are framework PRs
-[483](https://github.com/RetroPortingToolKit/psxrecomp/pull/483) and
-[484](https://github.com/RetroPortingToolKit/psxrecomp/pull/484).
+[3](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/3),
+[4](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/4) and
+[5](https://github.com/alexbeavs-ps1-ports/medievil-recomp/pull/5).
+The shared upstream series is
+[485](https://github.com/RetroPortingToolKit/psxrecomp/pull/485),
+[486](https://github.com/RetroPortingToolKit/psxrecomp/pull/486),
+[498](https://github.com/RetroPortingToolKit/psxrecomp/pull/498),
+[499](https://github.com/RetroPortingToolKit/psxrecomp/pull/499),
+[500](https://github.com/RetroPortingToolKit/psxrecomp/pull/500) and
+[501](https://github.com/RetroPortingToolKit/psxrecomp/pull/501).
+Framework PR 483 is merged; the older PGXP startup proposal 484 was
+superseded by merged PR 470. The shared series preserves that upstream
+session implementation. The game retains its already-qualified public
+framework pin while these changes are reviewed upstream.
 The published framework pins were fetched from the canonical remote into a
 fresh bare repository. Disc assets, generated retail code, captures and
 personal controller edits are excluded from the PRs.
