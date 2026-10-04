@@ -18,9 +18,9 @@ entry_point = "0x801B5CD0"
 [framework]
 name = "PSXRecomp"
 repository = "https://github.com/RetroPortingToolKit/psxrecomp.git"
-# Local rendering extensions integrated with upstream master 973d93a90761c8ef986ce9af63965d96a3613ed3.
-commit = "46af572902210d94e46305355ad22649c6b0bd3f"
-tree = "c1bb6af66225d646029aa2bade42d18f26ec7d91"
+# Canonical upstream master after the validated MediEvil shared series.
+commit = "a916ed52e00f364a8615b97cd597858aa7f385dc"
+tree = "7293a6e386ffdcf81ac74adc6d26a5505f7319d0"
 recomp_ui_commit = "03d58aa098fc4c2ca944ee43659cb45ce586362a"
 license = "See the pinned dependency license; this binding does not approve commercial use."
 
