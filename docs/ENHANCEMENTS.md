@@ -1,5 +1,13 @@
 # MediEvil enhancement implementation notes
 
+Current framework: canonical upstream `master` at `a916ed52e00f364a8615b97cd597858aa7f385dc`
+(tree `7293a6e386ffdcf81ac74adc6d26a5505f7319d0`). The shared PRs 485, 486 and 498-501
+are merged. The combined framework passed the bounded MMX6, Tomba, Tomba 2
+and Ape Escape regression suite plus focused runtime, codegen and real-GL tests.
+Historical integration pins below describe earlier work; the gitlink and
+`project-manifest.toml` identify the current dependency. This does not expand
+the gameplay coverage claims or qualify a release package.
+
 ## Native-quality update (2026-10-03)
 
 Smooth Presentation now interpolates camera/model transforms and runs additional
@@ -366,7 +374,7 @@ match every part of the owner's reported left-wall deformation.
 
 ## Visual defaults and extended terrain (2026-10-02)
 
-The current framework pin is `084719fc56a606f9aca9222ad30066f525b7b123`,
+The earlier integration used `084719fc56a606f9aca9222ad30066f525b7b123`,
 extending the native-wide integration merge `a95d8c77ee57d5aee84cc46142a0ac6f86d52cd7`
 of upstream master `973d93a90761c8ef986ce9af63965d96a3613ed3`. Framework
 [PR #483](https://github.com/RetroPortingToolKit/psxrecomp/pull/483) publishes the
@@ -539,8 +547,7 @@ The shared upstream series is
 [501](https://github.com/RetroPortingToolKit/psxrecomp/pull/501).
 Framework PR 483 is merged; the older PGXP startup proposal 484 was
 superseded by merged PR 470. The shared series preserves that upstream
-session implementation. The game retains its already-qualified public
-framework pin while these changes are reviewed upstream.
+session implementation. The game now pins the merged canonical master recorded above.
 The published framework pins were fetched from the canonical remote into a
 fresh bare repository. Disc assets, generated retail code, captures and
 personal controller edits are excluded from the PRs.
