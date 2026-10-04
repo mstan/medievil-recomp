@@ -15,11 +15,26 @@ and semi-transparency classes, live palettes and texture windows. Untracked
 sprites/UI remain nearest. The shared OpenGL fixture passed 325 checks.
 
 The shared projection policy also retains oversized, provenance-validated
-world triangles in the additional widescreen columns. Canonical VRAM keeps
-the original hardware rejection; ordinary mod-generated draws are unchanged.
-The shared GL authority/order regression passes 181 checks at both 1x and 4x.
+world triangles in the widescreen view. Admitted faces use identical canonical
+and wide passes with coherent GPU readback, avoiding a split at the original
+center-copy boundary. Ordinary mod-generated draws are unchanged.
+The widescreen adapter also opts into camera-plane clipping. Exact PGXP
+word transport carries signed homogeneous projection before the PS1 divider,
+SZ and SXY clamps; the GL path clips crossing textured world faces and their
+attributes before perspective division. Missing or modified words, 4:3 and
+software rendering retain their existing paths. Architectural GTE state is
+unchanged. The shared GL edge/readback/order regression passes 197 checks at
+1x and 4x, including near-camera crossings and entirely hidden faces.
 The title-hallway comparison exercising this path belongs to MediEvil II;
 it does not assert additional live map coverage for the first game.
+
+The rebuilt Clang executable also reached the Crypt through a fresh boot and
+New Game, with Stable filtering, interpolation, 5x resolution and 32:11 view.
+A ten-second sample recorded 59.57 guest VBlanks/s, 29.93 native draws/s and
+26.19 additional draws/s, with 97.86% static phase residency. Walking toward
+the gate retained the surrounding walls; 1744 additional passes completed
+without abort, watchdog, VRAM leak or span failure. This is a starting-room
+smoke check, not an assertion about every map or a locked 165 Hz image rate.
 
 The same cold Crypt checkpoint was measured for ten seconds per mode, with
 compilation stopped, a 1280x720 window and 5x internal scale (1200 lines):
@@ -351,7 +366,7 @@ match every part of the owner's reported left-wall deformation.
 
 ## Visual defaults and extended terrain (2026-10-02)
 
-The current framework pin is `1fc379534b1c72db475defcc6d7f4a6e03165772`,
+The current framework pin is `084719fc56a606f9aca9222ad30066f525b7b123`,
 extending the native-wide integration merge `a95d8c77ee57d5aee84cc46142a0ac6f86d52cd7`
 of upstream master `973d93a90761c8ef986ce9af63965d96a3613ed3`. Framework
 [PR #483](https://github.com/RetroPortingToolKit/psxrecomp/pull/483) publishes the

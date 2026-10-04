@@ -228,6 +228,7 @@ static void activate(void) {
         abort();
     }
     psx_mod_set_native_wide_projection_correction(1);
+    psx_mod_set_native_wide_near_clip(1);
     const uint32_t cull_sites[] = {0x80021EACu, 0x8002249Cu, 0x800224B0u};
     const uint32_t cull_words[] = {0x1900FFCFu, 0x1D000006u, 0x0501FE4Eu};
     psx_mod_set_native_wide_nclip_sites(cull_sites, cull_words, 3);
